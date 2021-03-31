@@ -2,10 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
+
 outputFile = open('case_details_output.csv', 'w', newline ='') 
 with outputFile:     
     write = csv.writer(outputFile) 
-    write.writerow(["DIARY NUMBER", 'CASE NUMBER','PETITION', "STATUS"])
+    write.writerow(["DIARY NUMBER", 'CASE NUMBER','PETITION', "RESPONDENT"])
+
 
 
 
@@ -51,29 +53,53 @@ for caseYear in range(2001, 2022):
 
             main_table = main_url_data.find('div',{'id':"collapse1"}).find('table')
 
-            diary_no_row = main_table.findAll('tr')[0]
-            diary_no = diary_no_row.findAll('td')[1].text
-            data_list.append(diary_no)
-            print(diary_no)
+            # diary_no_row = main_table.findAll('tr')[0]
+            # diary_no = diary_no_row.findAll('td')[1].text
+            # data_list.append(diary_no)
+            # print(diary_no)
 
-            case_row = main_table.findAll('tr')[1]
-            case_no = case_row.findAll('td')[1].text
-            data_list.append(case_no)
-            print(case_no)
+            # case_row = main_table.findAll('tr')[1]
+            # case_no = case_row.findAll('td')[1].text
+            # data_list.append(case_no)
+            # print(case_no)
 
-            petitioners_row = main_table.findAll('tr')[2]
-            petitioners = petitioners_row.findAll('td')[1].text
-            data_list.append(petitioners)
-            print(petitioners)
+            # petitioners_row = main_table.findAll('tr')[2]
+            # petitioners = petitioners_row.findAll('td')[1].text
+            # data_list.append(petitioners)
+            # print(petitioners)
 
 
-            status_row = main_table.findAll('tr')[3]
-            status = status_row.findAll('td')[1].text
-            data_list.append(status)
-            print(status)
-            
-            
+            # status_row = main_table.findAll('tr')[3]
+            # status = status_row.findAll('td')[1].text
+            # data_list.append(status)
+            # print(status)
 
+            diary_number = ""
+            case_num = ""
+            petitioner = ""    
+            respondent = ""
+                    
+            for single_row in main_table.findAll('tr'):
+                heading = single_row.findAll('td')[0].text.strip()
+                if heading == "Diary No.":
+                    diary_number = single_row.findAll('td')[1].text.strip()
+
+                if heading == "Case No.":
+                    case_num = single_row.findAll('td')[1].text.strip()
+
+                if heading == "Petitioner(s)":
+                    petitioner = single_row.findAll('td')[1].text.strip()
+                    
+                if heading == "Respondent(s)":
+                    respondent = single_row.findAll('td')[1].text.strip()
+                    
+
+            data_list.append(diaryNumber)
+            data_list.append(case_num)
+            data_list.append(petitioner)
+            data_list.append(respondent)
+
+            print(data_list)
             outputFile = open('case_details_output.csv', 'a', newline ='') 
             with outputFile:     
                 write = csv.writer(outputFile) 
